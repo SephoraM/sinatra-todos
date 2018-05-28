@@ -6,6 +6,7 @@ require "tilt/erubis"
 configure do # tell Sinatra to use sessions
   enable :sessions # activate sessions support
   set :session_secret, 'secret' # setting secret to 'secret'..don't do this
+  set :erb, :escape_html => true # HTML escape (sanitize) input
 end
 
 helpers do
@@ -60,6 +61,7 @@ end
 # view list of lists
 get "/lists" do
   @lists = session[:lists]
+
   erb :lists, layout: :layout
 end
 
@@ -73,7 +75,12 @@ get '/lists/:id' do
   @list_id = params[:id].to_i
   @list = session[:lists][@list_id]
 
-  erb :list, layout: :layout
+  if @list
+    erb :list, layout: :layout
+  else
+    session[:error] = "The specified list was not found."
+    redirect '/lists'
+  end
 end
 
 # render edit existing todo
