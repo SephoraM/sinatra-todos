@@ -1,7 +1,7 @@
 <ul id="lists">
-  <% sorted_with_original_index(@lists) do |list, index| %>
+  <% sorted_with_original_index(@lists) do |list| %>
     <li class="<%= classify_complete_list(list) %>">
-      <a href="/lists/<%= index %>">
+      <a href="/lists/<%= list[:id] %>">
         <h2><%= list[:name] %></h2>
         <p><%= todos_remaining_count(list) %>/<%= todos_size(list) %></p>
       </a>
